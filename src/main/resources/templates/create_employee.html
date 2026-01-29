@@ -8,6 +8,8 @@
     <h1>社員登録</h1>
     
     <form th:action="@{/employees}" th:object="${employee}" method="POST">
+		<input type="hidden" th:field="*{id}">
+		
         <div class="mb-3">
             <label class="form-label">名前</label>
             <input type="text" th:field="*{name}" class="form-control" placeholder="山田 太郎">

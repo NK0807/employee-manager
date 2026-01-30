@@ -14,7 +14,7 @@ public class DataLoader implements CommandLineRunner{
 	private final DepartmentRepository departmentRepository;
 	
 	@Override
-	public void run(String[] args) throws Exception{
+	public void run(String... args) throws Exception{
 		// もし部署テーブルが空っぽなら
 		if(departmentRepository.count() == 0) {
 			
@@ -24,7 +24,7 @@ public class DataLoader implements CommandLineRunner{
             createDepartment("経理部");
             createDepartment("人事部");
             
-            System.out.println("✅ 初期データ(部署)を登録しました！");
+            System.out.println("初期データ(部署)を登録しました！");
 		}
 	}
 	

@@ -2,6 +2,8 @@ package com.example.employee_manager.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +37,11 @@ public class EmployeeController {
 	
 	// 登録ボタンが押されたときの処理
 	@PostMapping("/employees")
-	public String saveEmployee(@ModelAttribute("employee") Employee employee) {
+	public String saveEmployee(@Validated @ModelAttribute("employee") Employee employee, BindingResult result) {
+		if(result.hasErrors()) {
+			return "create_employee";
+		}
+		
 		service.save(employee);
 		return "redirect:/employees";
 	}

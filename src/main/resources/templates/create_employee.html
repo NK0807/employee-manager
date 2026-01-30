@@ -12,17 +12,29 @@
 		
         <div class="mb-3">
             <label class="form-label">名前</label>
-            <input type="text" th:field="*{name}" class="form-control" placeholder="山田 太郎">
+            <input type="text" th:field="*{name}" class="form-control"
+				th:errorclass="is-invalid" placeholder="山田 太郎">
+			<div class="invalid-feedback" th:errors="*{name}">
+				ここにエラーメッセージが出ます
+			</div>		
         </div>
         
         <div class="mb-3">
             <label class="form-label">部署</label>
-            <input type="text" th:field="*{department}" class="form-control" placeholder="開発部">
+            <input type="text" th:field="*{department}" class="form-control" 
+				th:errorclass="is-invalid" placeholder="開発部">
+			<div class="invalid-feedback" th:errors="*{department}">
+				ここにエラーメッセージが出ます
+			</div>
         </div>
         
         <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="text" th:field="*{email}" class="form-control" placeholder="taro@example.com">
+            <input type="text" th:field="*{email}" class="form-control"
+				th:errorclass="is-invalid" placeholder="taro@example.com">
+			<div class="invalid-feedback" th:errors="*{email}">
+				ここにエラーメッセージが出ます
+			</div>
         </div>
         
         <button type="submit" class="btn btn-success">保存</button>

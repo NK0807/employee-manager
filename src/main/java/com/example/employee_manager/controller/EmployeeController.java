@@ -1,5 +1,7 @@
 package com.example.employee_manager.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.employee_manager.entity.Employee;
 import com.example.employee_manager.service.EmployeeService;
@@ -22,8 +25,20 @@ public class EmployeeController {
 	
 	// 社員一覧画面を表示
 	@GetMapping("/employees")
-	public String listEmployees(Model model) {
-		model.addAttribute("employees", service.findAll());
+	public String listEmployees(Model model, 
+            @RequestParam(name = "keyword", required = false) String keyword) {
+		List<Employee> list;
+		if(keyword != null && !keyword.isEmpty()) {
+			// キーワードがある場合
+			list = service.search(keyword);
+		} else {
+			// キーワードがない場合
+			list = service.findAll();
+		}
+		
+		model.addAttribute("employees", list);
+		model.addAttribute("keyword", keyword);
+		
 		return "employees";
 	}
 	

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.employee_manager.entity.Employee;
+import com.example.employee_manager.repository.DepartmentRepository;
 import com.example.employee_manager.service.EmployeeService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,17 +23,16 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeController {
 	
 	private final EmployeeService service;
+	private final DepartmentRepository departmentRepository;
 	
 	// 社員一覧画面を表示
 	@GetMapping("/employees")
 	public String listEmployees(Model model, 
-            @RequestParam(name = "keyword", required = false) String keyword) {
+			@RequestParam(name = "keyword", required = false) String keyword) {
 		List<Employee> list;
 		if(keyword != null && !keyword.isEmpty()) {
-			// キーワードがある場合
 			list = service.search(keyword);
 		} else {
-			// キーワードがない場合
 			list = service.findAll();
 		}
 		
@@ -46,14 +46,21 @@ public class EmployeeController {
 	@GetMapping("/employees/new")
 	public String createEmployeeForm(Model model) {
 		Employee employee = new Employee();
-		model.addAttribute(employee);
+		model.addAttribute("employee", employee);
+		
+		// 部署の選択肢を画面に渡す
+		model.addAttribute("departments", departmentRepository.findAll());
+		
 		return "create_employee";
 	}
 	
 	// 登録ボタンが押されたときの処理
 	@PostMapping("/employees")
-	public String saveEmployee(@Validated @ModelAttribute("employee") Employee employee, BindingResult result) {
+	public String saveEmployee(@Validated @ModelAttribute("employee") Employee employee, BindingResult result, Model model) {
+		
 		if(result.hasErrors()) {
+			// エラーで戻る時も、部署リストを渡さないとプルダウンが作れなくてエラーになる
+			model.addAttribute("departments", departmentRepository.findAll());
 			return "create_employee";
 		}
 		
@@ -66,6 +73,10 @@ public class EmployeeController {
 	public String editEmployeeFrom(@PathVariable("id") Integer id, Model model) {
 		Employee employee = service.get(id);
 		model.addAttribute("employee", employee);
+		
+		// 編集画面でも部署を選べるようにする
+		model.addAttribute("departments", departmentRepository.findAll());
+		
 		return "create_employee";
 	}
 	

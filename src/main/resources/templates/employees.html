@@ -34,7 +34,7 @@
             <tr th:each="emp : ${employees}">
                 <td th:text="${emp.id}"></td>
                 <td th:text="${emp.name}"></td>
-                <td th:text="${emp.department}"></td>
+				<td th:text="${emp.department != null ? emp.department.name : '所属なし'}">営業部</td>
                 <td th:text="${emp.email}"></td>
 				
 				<td>

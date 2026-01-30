@@ -34,4 +34,9 @@ public class EmployeeService {
 	public void delete(Integer id) {
 		repository.deleteById(id);
 	}
+	
+	// 名前で検索
+	public List<Employee> search(String keyword) {
+		return repository.findByNameContaining(keyword);
+	}
 }

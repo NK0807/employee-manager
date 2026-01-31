@@ -1,11 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>社員一覧</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="container mt-4">
-    <h1>社員一覧</h1>
+	<div class="container">
+	        
+	<div class="d-flex justify-content-between align-items-center my-4">
+		<h1>社員一覧</h1>
+	            
+		<div>
+			<span class="me-2">
+				ようこそ <strong sec:authentication="name">ユーザー名</strong> さん
+			</span>
+	                
+			<form th:action="@{/logout}" method="post" style="display:inline;">
+				<button class="btn btn-outline-danger btn-sm" type="submit">ログアウト</button>
+			</form>
+		</div>
+	</div>
     
 	<form th:action="@{/employees}" method="get" class="mb-3">
 		<div class="input-group">
@@ -41,7 +56,8 @@
 					<a th:href="@{/employees/edit/{id}(id=${emp.id})}" class="btn btn-primary btn-sm">編集</a>            
 					<a th:href="@{/employees/delete/{id}(id=${emp.id})}" 
 					class="btn btn-danger btn-sm"
-					onclick="return confirm('本当に削除しますか？');">削除</a>
+					onclick="return confirm('本当に削除しますか？');"
+					sec:authorize="hasAuthority('ADMIN')">削除</a>
 				</td>
             </tr>
         </tbody>

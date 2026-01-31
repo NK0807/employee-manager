@@ -1,10 +1,13 @@
 package com.example.employee_manager;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.employee_manager.entity.Department;
+import com.example.employee_manager.entity.User;
 import com.example.employee_manager.repository.DepartmentRepository;
+import com.example.employee_manager.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner{
 	private final DepartmentRepository departmentRepository;
+	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 	
 	@Override
 	public void run(String... args) throws Exception{
@@ -25,6 +30,26 @@ public class DataLoader implements CommandLineRunner{
             createDepartment("人事部");
             
             System.out.println("初期データ(部署)を登録しました！");
+		}
+		
+		// ユーザー登録処理
+		if(userRepository.count() == 0) {
+			// 管理者(ADMIN)
+			User admin = new User();
+			admin.setUsername("admin");
+			// パスワードは"password"を暗号化して保存
+			admin.setPassword(passwordEncoder.encode("password"));
+			admin.setRole("ADMIN");
+			userRepository.save(admin);
+			
+			// 一般ユーザー(USER)
+			User general = new User();
+			general.setUsername("user");
+			general.setPassword(passwordEncoder.encode("password"));
+			general.setRole("USER");
+			userRepository.save(general);
+			
+			System.out.println("初期データ(ユーザー: admin & user)を登録しました！");
 		}
 	}
 	
